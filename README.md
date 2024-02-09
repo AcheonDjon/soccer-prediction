@@ -19,4 +19,3 @@ Workbook: https://analyticsatwharton.smapply.io/protected/r/FkmBTc_C-GJ6iD28zx8O
 
 
 Videos - https://upenn.hosted.panopto.com/Panopto/Pages/Viewer.aspx?pid=0dbde4e5-41c3-4976-b985-b10a011538c0
-
