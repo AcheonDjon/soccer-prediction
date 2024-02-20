@@ -1,16 +1,49 @@
 import numpy as np
 
-# Function to compute probability of team A winning
 def compute_probability(elo_A, elo_B):
+    """
+    Compute the probability of team A winning based on their Elo ratings.
+
+    Parameters:
+    elo_A (float): Elo rating of team A.
+    elo_B (float): Elo rating of team B.
+
+    Returns:
+    float: Probability of team A winning.
+    """
     return 1 / (1 + 10 ** ((elo_B - elo_A) / 400))
 
-# Function to calculate expected outcome using logistic regression
 def calculate_expected_outcome(features_A, features_B, elo_A, elo_B, coefficients):
+    """
+    Calculate the expected outcome of a match using logistic regression.
+
+    Parameters:
+    features_A (ndarray): Features of team A.
+    features_B (ndarray): Features of team B.
+    elo_A (float): Elo rating of team A.
+    elo_B (float): Elo rating of team B.
+    coefficients (ndarray): Coefficients for the logistic regression model.
+
+    Returns:
+    float: Expected outcome of the match.
+    """
     z = np.dot(coefficients, np.concatenate(([1], features_A - features_B, [elo_B - elo_A])))
     return 1 / (1 + np.exp(-z))
 
-# Function to update Elo ratings after a match
 def update_elo_ratings(actual_outcome, elo_A, elo_B, expected_outcome, k):
+    """
+    Update the Elo ratings of two teams after a match.
+
+    Parameters:
+    actual_outcome (int): Actual outcome of the match (1 for team A win, 0 for team B win).
+    elo_A (float): Elo rating of team A.
+    elo_B (float): Elo rating of team B.
+    expected_outcome (float): Expected outcome of the match.
+    k (int): K-factor for Elo ratings.
+
+    Returns:
+    tuple: Updated Elo ratings of team A and team B.
+    """
     elo_A_new = elo_A + k * (actual_outcome - expected_outcome)
     elo_B_new = elo_B + k * (expected_outcome - actual_outcome)
     return elo_A_new, elo_B_new
