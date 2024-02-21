@@ -19,14 +19,15 @@ def load_csv_dataset(file_path):
 
 def determine_outcome(row):
     if row['HomeScore'] > row['AwayScore']:
-        return 0
+        return 0 #home win
+    #adding resolution for draws
     elif row['HomeScore'] == row['AwayScore']:
            if row['Home_xG'] >= row['Away_xG']:
               return 0 #home win        
            else:
               return 1 #away win
     else:
-        return 1
+        return 1 #away win
 
 
 # Load the dataset
@@ -48,13 +49,34 @@ X = StandardScaler().fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=47)
 
 # Train the xgboost model
-model = xgboost.XGBClassifier()
-model.fit(X_train, y_train)
+# Hyperparameter tuning
+from sklearn.model_selection import GridSearchCV
 
-# Evaluate the model
-y_pred = model.predict(X_test)
+# Define the parameter grid for hyperparameter tuning
+param_grid = {
+    'learning_rate': [0.1, 0.01, 0.001],
+    'max_depth': [3, 5, 7],
+    'n_estimators': [100, 200, 300],
+    'subsample': [0.6, 0.8, 1.0],
+    'colsample_bytree': [0.6, 0.8, 1.0]
+}
+# Create an instance of the XGBoost classifier
+xgb_model = xgboost.XGBClassifier()
+
+# Perform grid search to find the best hyperparameters
+grid_search = GridSearchCV(estimator=xgb_model, param_grid=param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+
+# Get the best hyperparameters
+best_params = grid_search.best_params_
+
+# Train the XGBoost model with the best hyperparameters
+xgb_model = xgboost.XGBClassifier(**best_params)
+xgb_model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = xgb_model.predict(X_test)
+
+# Calculate accuracy score
 accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-
-
-print(model.feature_importances_)
+print("Accuracy:", accuracy)
