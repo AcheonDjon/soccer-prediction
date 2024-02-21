@@ -21,9 +21,12 @@ def determine_outcome(row):
     if row['HomeScore'] > row['AwayScore']:
         return 0
     elif row['HomeScore'] == row['AwayScore']:
-        return 1
+           if row['Home_xG'] >= row['Away_xG']:
+              return 0 #home win        
+           else:
+              return 1 #away win
     else:
-        return 2
+        return 1
 
 
 # Load the dataset
