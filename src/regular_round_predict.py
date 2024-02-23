@@ -1,12 +1,11 @@
 import time
-from matplotlib import pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import pandas as pd
-import xgboost as xgb
+import xgboost
 
 
 def load_csv_dataset(file_path):
@@ -64,7 +63,7 @@ param_grid = {
     'colsample_bytree': [0.6, 0.8, 1.0]
 }
 # Create an instance of the XGBoost classifier
-xgb_model = xgb.XGBClassifier()
+xgb_model = xgboost.XGBClassifier()
 
 # Perform grid search to find the best hyperparameters
 grid_search = GridSearchCV(estimator=xgb_model, param_grid=param_grid, cv=5)
@@ -72,10 +71,6 @@ grid_search.fit(X_train, y_train)
 
 # Get the best hyperparameters
 best_params = grid_search.best_params_
-
-# Train the XGBoost model with the best hyperparameters
-xgb_model = xgb_model.XGBClassifier(**best_params)
-xgb_model.fit(X_train, y_train)
 
 # Make predictions on the test set
 y_pred = xgb_model.predict(X_test)
@@ -91,8 +86,3 @@ execution_time = end_time-start_time
 print(f"Execution time: {execution_time} seconds")
 
 #save the model as pkl file
-# xgb_model.save_model('./model/xgb_model.pkl')
-
-# Plot feature importance
-xgb_model.plot_importance(xgb_model)
-plt.show()
