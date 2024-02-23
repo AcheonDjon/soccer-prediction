@@ -19,32 +19,36 @@ def load_csv_dataset(file_path):
 
 
 def determine_outcome(row):
+    """
+    Determine the outcome of a soccer match based on the scores and expected goals
+    :param row: A row from the dataset containing the scores and expected goals
+    :return: 0 for home win, 1 for away win, and 2 for draw
+    """
     if row['HomeScore'] > row['AwayScore']:
-        return 0 #home win
-    #adding resolution for draws
+        return 0  # home win
     elif row['HomeScore'] == row['AwayScore']:
-           if row['Home_xG'] >= row['Away_xG']:
-              return 0 #home win        
-           else:
-              return 1 #away win
+        if row['Home_xG'] >= row['Away_xG']:
+            return 0  # home win
+        else:
+            return 1  # away win
     else:
-        return 1 
+        return 1
 
-start_time = time.time() 
+
+start_time = time.time()
 
 # Load the dataset
 file_path = './data/elo_ratings.csv'
 dataset = load_csv_dataset(file_path)
 dataset['Outcome'] = dataset.apply(determine_outcome, axis=1)
-# print(dataset)
 
-#setup y and X
-y = dataset['Outcome']  # Assuming 'Outcome' column contains the target variable
-X = dataset.drop(['Outcome'], axis=1)  # Assuming 'Outcome' column contains the target variable
-X = X.iloc[:, 5:]  # Exclude the first 5 columns as some are categorical and others are not useful for prediction and can't use win or lose as a feature
+# Setup y and X
+y = dataset['Outcome']
+X = dataset.drop(['Outcome', 'game_ordered_id'], axis=1)
+col = X.columns
+X = X.iloc[:, 5:]
 
-#normalize the data using StandardScaler?
-#X = (X - X.mean()) / X.std()
+# Normalize the data using StandardScaler
 X = StandardScaler().fit_transform(X)
 
 # Split the dataset for training and testing
@@ -62,6 +66,7 @@ param_grid = {
     'subsample': [0.6, 0.8, 1.0],
     'colsample_bytree': [0.6, 0.8, 1.0]
 }
+
 # Create an instance of the XGBoost classifier
 xgb_model = xgboost.XGBClassifier()
 
@@ -73,16 +78,25 @@ grid_search.fit(X_train, y_train)
 best_params = grid_search.best_params_
 
 # Make predictions on the test set
-y_pred = xgb_model.predict(X_test)
+y_pred = grid_search.predict(X_test)
 
 # Calculate accuracy score
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 
-end_time = time.time() 
-
-execution_time = end_time-start_time
+end_time = time.time()
+execution_time = end_time - start_time
 
 print(f"Execution time: {execution_time} seconds")
 
-#save the model as pkl file
+# Get feature importance
+feature_importance = grid_search.best_estimator_.feature_importances_
+
+# Create a DataFrame to store feature importance
+feature_importance_df = pd.DataFrame({'Importance': feature_importance})
+
+# Sort the DataFrame by importance in descending order
+feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
+
+# Print the feature importance
+print(feature_importance_df)
