@@ -1,4 +1,5 @@
 import time
+import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.linear_model import LinearRegression
@@ -25,14 +26,14 @@ def determine_outcome(row):
     :return: 0 for home win, 1 for away win, 
     """
     if row['HomeScore'] > row['AwayScore']:
-        return 0  # home win
+        return 10  # home win
     elif row['HomeScore'] == row['AwayScore']:
         if row['Home_xG'] >= row['Away_xG']: #TODO: check if this is correct whether to use xG or not
-            return 0  # home win
+            return 5  # home win
         else:
-            return 1  # away win
+            return 0  # away win
     else:
-        return 1
+        return 0
 
 
 start_time = time.time()
@@ -68,7 +69,7 @@ param_grid = {
 }
 
 # Create an instance of the XGBoost classifier
-xgb_model = xgboost.XGBClassifier()
+xgb_model = xgboost.XGBRegressor()
 
 # Perform grid search to find the best hyperparameters
 grid_search = GridSearchCV(estimator=xgb_model, param_grid=param_grid, cv=5)
@@ -80,23 +81,27 @@ best_params = grid_search.best_params_
 # Make predictions on the test set
 y_pred = grid_search.predict(X_test)
 
-# Calculate accuracy score
-accuracy = accuracy_score(y_test, y_pred)
-print("Accuracy:", accuracy)
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, explained_variance_score
 
-end_time = time.time()
-execution_time = end_time - start_time
+# Assuming y_true are the true target values and y_pred are the predicted values
+# Calculate MAE
+mae = mean_absolute_error(y_test, y_pred)
 
-print(f"Execution time: {execution_time} seconds")
+# Calculate MSE
+mse = mean_squared_error(y_test, y_pred)
 
-# Get feature importance
-feature_importance = grid_search.best_estimator_.feature_importances_
+# Calculate RMSE
+rmse = np.sqrt(mse)
 
-# Create a DataFrame to store feature importance
-feature_importance_df = pd.DataFrame({'Importance': feature_importance})
+# Calculate R-squared (R2)
+r2 = r2_score(y_test, y_pred)
 
-# Sort the DataFrame by importance in descending order
-feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
+# Calculate explained variance score
+explained_variance = explained_variance_score(y_test, y_pred)
 
-# Print the feature importance
-print(feature_importance_df)
+# Print or use the metrics
+print("MAE:", mae)
+print("MSE:", mse)
+print("RMSE:", rmse)
+print("R-squared (R2):", r2)
+print("Explained Variance Score:", explained_variance)

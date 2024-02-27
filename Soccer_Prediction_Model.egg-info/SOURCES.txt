@@ -1,0 +1,6 @@
+README.md
+setup.py
+Soccer_Prediction_Model.egg-info/PKG-INFO
+Soccer_Prediction_Model.egg-info/SOURCES.txt
+Soccer_Prediction_Model.egg-info/dependency_links.txt
+Soccer_Prediction_Model.egg-info/top_level.txt
