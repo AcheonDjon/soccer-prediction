@@ -45,6 +45,6 @@ def calculate_elo_rating(row, home_team_elo, away_team_elo, outcome):
     row['Home_Elo_Start'] =  new_home_team_elo
     row['Away_Elo_Start'] =  new_away_team_elo
 
-    return new_home_team_elo, new_away_team_elo
+    return new_home_team_elo, new_away_team_elo, 
 
         
