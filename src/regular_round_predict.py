@@ -100,3 +100,10 @@ feature_importance_df = feature_importance_df.sort_values(by='Importance', ascen
 
 # Print the feature importance
 print(feature_importance_df)
+
+# Save the model
+import pickle
+
+# Save grid search results using pickle
+with open('grid_search_results.pkl', 'wb') as f:
+    pickle.dump(grid_search, f)
