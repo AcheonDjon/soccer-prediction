@@ -29,10 +29,10 @@ def home_team_analysis(home_team_name, away_team_name):
      
     hta = merge_home_away(home_team_name,away_team_name)
     
-    hta['home_elo_start'] = 1500
+    hta['home_elo_start'] = 1250
     hta['away_elo_start'] = 1500
-    hta['home_elo_end'] = 1500
-    hta['away_elo_end'] = 1500
+    hta['home_elo_end'] = 600
+    hta['away_elo_end'] = 600
 
     hta = hta[['Home_xG', 'Away_xG', 'Home_shots', 'Away_shots', 'Home_corner', 'Away_corner', 'Home_PK_Goal', 'Away_PK_Goal', 'Home_PK_shots', 'Away_PK_shots', 'Home_ToP', 'home_elo_start', 'away_elo_start', 'home_elo_end', 'away_elo_end']]
 
@@ -57,4 +57,5 @@ for index, row in group_round.iterrows():
     hta = home_team_analysis(home_team,away_team)
     
     predict = model.predict(hta)
-    print(f"predition = {predict}")
+    
+    print(f"predition = {model.predict_proba(hta)}")
