@@ -58,4 +58,4 @@ for index, row in group_round.iterrows():
     
     predict = model.predict(hta)
     
-    print(f"predition = {model.predict_proba(hta)}")
+    print(f"predition = {model.predict(hta)}")
