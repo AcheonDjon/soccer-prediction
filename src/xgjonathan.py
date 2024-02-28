@@ -32,6 +32,8 @@ classifier = xg.XGBClassifier()
 
 classifier.fit(X_train, y_train)
 
+#print feature importance
+
 y_pred = classifier.predict(X_test)
 
 print(y_pred)
@@ -39,3 +41,7 @@ accuracy = accuracy_score(y_test, y_pred)
 
 print(accuracy)
 # df = df.drop(['game_id',"HomeTeam","AwayTeam","HomeScore",'AwayScore'], axis=1)
+
+
+#save the model
+classifier.save_model('xgboostmodel20240227.json')
