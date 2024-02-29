@@ -1,3 +1,4 @@
+import pickle
 import pandas as pd
 import xgboost as xg 
 from sklearn.model_selection import train_test_split 
@@ -19,6 +20,8 @@ def outcome(row):
     else:
         return 0
 
+
+# df["Away_ToP"]= 1- df['Home_ToP']
 X = df.iloc [:,5:]
 
 Y = df.apply(outcome, axis=1)
@@ -44,4 +47,8 @@ print(accuracy)
 
 
 #save the model
-classifier.save_model('xgboostmodel20240227.json')
+# Save the trained model to a file
+with open("xgboost_model.pkl", "wb") as f:
+    pickle.dump(classifier, f)
+print(X_test)
+# print(df)
