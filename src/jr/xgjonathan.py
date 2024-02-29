@@ -7,7 +7,8 @@ from sklearn.metrics import accuracy_score
 
 df = pd.read_csv('./data/regular_season_data.csv')
 
-
+#1 means the home team won
+#0 means the away team won 
 def outcome(row):
     if row['HomeScore'] > row['AwayScore']:
         return 1
@@ -36,6 +37,12 @@ classifier = xg.XGBClassifier()
 classifier.fit(X_train, y_train)
 
 #print feature importance
+# Get feature importances
+importances = classifier.feature_importances_
+
+# Print feature importances
+for i, importance in enumerate(importances):
+    print(f"Feature {i}: {importance}")
 
 y_pred = classifier.predict(X_test)
 
