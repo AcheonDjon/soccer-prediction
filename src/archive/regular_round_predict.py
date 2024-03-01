@@ -100,7 +100,6 @@ feature_importance_df = feature_importance_df.sort_values(by='Importance', ascen
 
 # Print the feature importance
 print(feature_importance_df)
-
 # Save the model
 import pickle
 

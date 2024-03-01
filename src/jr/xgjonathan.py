@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score 
 
 
-df = pd.read_csv('./data/regular_season_data.csv')
+df = pd.read_csv('./data/NSL_regular_season_final_model_input.csv')
 
 #1 means the home team won
 #0 means the away team won 
@@ -23,11 +23,11 @@ def outcome(row):
 
 
 # df["Away_ToP"]= 1- df['Home_ToP']
-X = df.iloc [:,5:]
+X = df.iloc [:,5:-2]
+
+print(X)
 
 Y = df.apply(outcome, axis=1)
-
-
 
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)

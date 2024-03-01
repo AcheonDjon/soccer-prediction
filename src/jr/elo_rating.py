@@ -1,7 +1,9 @@
 import pandas as pd
-regularteamsdata = pd.read_csv('./data/regular_season_data.csv')
 
-home_rating1 = 1700
+
+regularteamsdata = pd.read_csv('./data/NSL_regular_season_data_2 (1).csv')
+
+home_rating1 = 1500
 away_rating2 = 1500
 
 def outcome(row):
@@ -29,4 +31,52 @@ def ELORATING(team1_rating, team2_rating, team1_result, k_factor=32):
 
       return new_rating_team1, new_rating_team2
 
-print(ELORATING(home_rating1, away_rating2, 0))
+# print(ELORATING(home_rating1, away_rating2, 0))
+
+
+#iterate through regularteamsdata
+
+#start elo dictionary {'team' : 'latest elo rating' } 
+#call it elo_dictionary
+elo_dict = {}
+
+#for each game, the start and away elo rating is computed before and after the game adf dj
+for row_index, row_data in regularteamsdata.iterrows():
+    
+    # creating a new column called home elo that contains the values of a starting home team elo rating
+    #if it's not in the dictionary it will return 1500
+
+    home_elo_start = elo_dict.get(row_data['HomeTeam'],1500)
+    away_elo_start = elo_dict.get(row_data['AwayTeam'],1500)
+
+
+    regularteamsdata.at[row_index,'home_elo_start'] = home_elo_start
+    regularteamsdata.at[row_index,'away_elo_start'] = away_elo_start
+    
+
+     #get outcome of this game 
+    out_come = outcome(row_data)
+
+     #get new elo rating based on outcome 
+    new_home_rating, new_away_rating = ELORATING(home_elo_start,away_elo_start, out_come) 
+     #A->B with B winning, rating = 1486 and 1516
+    
+     #add or update new team ratings
+    regularteamsdata.at[row_index,'home_elo_end'] = new_home_rating
+    regularteamsdata.at[row_index,'away_elo_end'] = new_away_rating
+
+
+     #update elo dictionary with the latest rating for home and away team 
+    elo_dict[row_data['HomeTeam']] = new_home_rating
+
+    elo_dict[row_data['AwayTeam']] = new_away_rating 
+
+
+#finally save the dataframe to a new file 
+print( regularteamsdata)
+
+regularteamsdata.to_csv('./data/NSL_regular_season_final_model_input.csv')
+
+elo_final_ratings_df= pd.DataFrame(elo_dict, index=[0])
+
+elo_final_ratings_df.to_csv('./data/NSL_regular_season_final_elo_ratings.csv')

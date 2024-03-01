@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import xgboost as xg
 
-df = pd.read_csv('./data/regular_season_data.csv')
-gdf =pd.read_csv('./data/NSL_Group_Round_Games.csv')
+df = pd.read_csv('./data/NSL_regular_season_data_2 (1).csv')
+gdf =pd.read_csv('./data/NSL_Group_Round_Games (6).csv')
 
 def find_team(row):
   HomeTeam = row['HomeTeam']

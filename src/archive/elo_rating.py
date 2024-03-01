@@ -10,7 +10,7 @@ def calculate_elo_rating(winner_rating, loser_rating):
 
 elo_ratings = {}
 
-with open('regular.csv', 'r') as file:
+with open('NSL_regular_season_data_2 (1).csv', 'r') as file:
     reader = csv.reader(file)
     for row in reader:
         team1 = row[0]
