@@ -72,11 +72,16 @@ for row_index, row_data in regularteamsdata.iterrows():
     elo_dict[row_data['AwayTeam']] = new_away_rating 
 
 
+#drop the index
+regularteamsdata.reset_index(drop=True,inplace=True)
+
 #finally save the dataframe to a new file 
 print( regularteamsdata)
 
-regularteamsdata.to_csv('./data/NSL_regular_season_final_model_input.csv')
+regularteamsdata.to_csv('./data/NSL_regular_season_final_model_input.csv',index=False)
 
 elo_final_ratings_df= pd.DataFrame(elo_dict, index=[0])
+
+print(regularteamsdata)
 
 elo_final_ratings_df.to_csv('./data/NSL_regular_season_final_elo_ratings.csv')

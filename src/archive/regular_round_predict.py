@@ -38,18 +38,24 @@ def determine_outcome(row):
 start_time = time.time()
 
 # Load the dataset
-file_path = './data/elo_ratings.csv'
+file_path = './data/NSL_regular_season_final_model_input.csv'
 dataset = load_csv_dataset(file_path)
+
+dataset = pd.DataFrame(dataset)
+
 dataset['Outcome'] = dataset.apply(determine_outcome, axis=1)
 
-# Setup y and X
+# # Setup y and X
 y = dataset['Outcome']
-X = dataset.drop(['Outcome', 'game_ordered_id'], axis=1)
-col = X.columns
-X = X.iloc[:, 5:]
+X = dataset.drop(['Outcome',], axis=1)
+
+X = X.iloc[:,5:-2]
+
+print(X)
+
 
 # Normalize the data using StandardScaler
-# X = StandardScaler().fit_transform(X)
+X = StandardScaler().fit_transform(X)
 
 # Split the dataset for training and testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=47)
@@ -62,7 +68,7 @@ from sklearn.model_selection import GridSearchCV
 param_grid = {
     'learning_rate': [0.1, 0.01, 0.001],
     'max_depth': [3, 5, 7],
-    'n_estimators': [100, 200, 300],
+    'n_estimators': [100, 200, 300,400],
     'subsample': [0.6, 0.8, 1.0],
     'colsample_bytree': [0.6, 0.8, 1.0]
 }

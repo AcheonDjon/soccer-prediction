@@ -6,6 +6,9 @@ import xgboost as xg
 df = pd.read_csv('./data/NSL_regular_season_data_2 (1).csv')
 gdf =pd.read_csv('./data/NSL_Group_Round_Games (6).csv')
 
+elo_dict = pd.read_csv('./data/NSL_regular_season_final_elo_ratings.csv')
+#load elo rating from files
+
 def find_team(row):
   HomeTeam = row['HomeTeam']
   AwayTeam = row['AwayTeam']
@@ -23,8 +26,8 @@ def find_team(row):
         'Home_corner' :  filtered_home_df['Home_corner'].mean(),
         'Home_PK_Goal' :  filtered_home_df['Home_PK_Goal'].mean(),
         'Home_PK_shots' :  filtered_home_df['Home_PK_shots'].mean(),
-        'Home_ToP' :  filtered_home_df['Home_ToP'].mean()
-
+        'Home_ToP' :  filtered_home_df['Home_ToP'].mean(),
+        'home_elo_start': elo_dict[HomeTeam]
       },index=[0]
   )
 
@@ -35,7 +38,7 @@ def find_team(row):
         'Away_corner' :  filtered_away_df['Away_corner'].mean(),
         'Away_PK_Goal' :  filtered_away_df['Away_PK_Goal'].mean(),
         'Away_PK_shots' :  filtered_away_df['Away_PK_shots'].mean(),
-
+        'away_elo_start': elo_dict[AwayTeam]
       },index=[0]
   )
 
