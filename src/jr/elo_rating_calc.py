@@ -1,10 +1,10 @@
 import pandas as pd
 
 
-regularteamsdata = pd.read_csv('./data/NSL_regular_season_data_2 (1).csv')
+regularteamsdata = pd.read_csv('./data/NSL_regular_season_data.csv')
 
-home_rating1 = 1500
-away_rating2 = 1500
+# home_rating1 = 1500
+# away_rating2 = 1500
 
 def outcome(row):
     if row['HomeScore'] > row['AwayScore']:
@@ -44,17 +44,19 @@ elo_dict = {}
 for row_index, row_data in regularteamsdata.iterrows():
     
     # creating a new column called home elo that contains the values of a starting home team elo rating
-    #if it's not in the dictionary it will return 1500
+    
+    #if it's not in the elo rating dictionary it will return 1500
+
 
     home_elo_start = elo_dict.get(row_data['HomeTeam'],1500)
     away_elo_start = elo_dict.get(row_data['AwayTeam'],1500)
 
 
+    #updating the original dataframe at the nth row with the variables defined aboved
     regularteamsdata.at[row_index,'home_elo_start'] = home_elo_start
     regularteamsdata.at[row_index,'away_elo_start'] = away_elo_start
     
-
-     #get outcome of this game 
+     #get outcome of for each game 
     out_come = outcome(row_data)
 
      #get new elo rating based on outcome 
@@ -64,7 +66,6 @@ for row_index, row_data in regularteamsdata.iterrows():
      #add or update new team ratings
     regularteamsdata.at[row_index,'home_elo_end'] = new_home_rating
     regularteamsdata.at[row_index,'away_elo_end'] = new_away_rating
-
 
      #update elo dictionary with the latest rating for home and away team 
     elo_dict[row_data['HomeTeam']] = new_home_rating
@@ -76,7 +77,6 @@ for row_index, row_data in regularteamsdata.iterrows():
 regularteamsdata.reset_index(drop=True,inplace=True)
 
 #finally save the dataframe to a new file 
-print( regularteamsdata)
 
 regularteamsdata.to_csv('./data/NSL_regular_season_final_model_input.csv',index=False)
 
