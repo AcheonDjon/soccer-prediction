@@ -65,10 +65,17 @@ def find_team(row):
   #predictions = loaded_model.predict_proba(df_combined)
   prediction = loaded_model.predict(df_combined)
 
+  pred_probab = loaded_model.predict_proba(df_combined)
+
   winner = HomeTeam if prediction == 1 else AwayTeam
+  winner_type = 'H' if prediction == 1 else 'A'
+  winner_proba = pred_probab[0][1] if prediction == 1 else pred_probab[0][0]
 
+  print(f"{HomeTeam} vs {AwayTeam} and the winner is {winner} -- ({winner_type}) -- with a prob of {winner_proba} ")
+  print(f"{HomeTeam} vs {AwayTeam} and the pred_probab on the classes is {pred_probab}")
+  print(f"{HomeTeam} vs {AwayTeam} and the home probability is {pred_probab[0][1]}")
 
-  print(f"{HomeTeam} vs {AwayTeam} and the winner is {winner}")
+  print(f"------------------------------------")
   
 
 HomeTeamWonOrNot=gdf.apply(find_team, axis=1)
