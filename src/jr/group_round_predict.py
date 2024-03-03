@@ -2,6 +2,7 @@ import pickle
 import pandas as pd
 import numpy as np
 import xgboost as xg
+from customprobability import CustomVotingClassifier
 
 df = pd.read_csv('./data/NSL_regular_season_data.csv')
 gdf =pd.read_csv('./data/NSL_Group_Round_Games.csv')
@@ -12,7 +13,7 @@ elo_dict = pd.read_csv('./data/NSL_regular_season_final_elo_ratings.csv')
 #loaded the model 
 # Load the saved model from file
 loaded_model = None
-with open("xgboost_model.pkl", "rb") as j:
+with open("voting_class.pkl", "rb") as j:
     loaded_model = pickle.load(j)
 
 
@@ -65,15 +66,15 @@ def find_team(row):
   #predictions = loaded_model.predict_proba(df_combined)
   prediction = loaded_model.predict(df_combined)
 
-  pred_probab = loaded_model.predict_proba(df_combined)
+  #pred_probab = loaded_model.predict_proba(df_combined)
 
   winner = HomeTeam if prediction == 1 else AwayTeam
   winner_type = 'H' if prediction == 1 else 'A'
-  winner_proba = pred_probab[0][1] if prediction == 1 else pred_probab[0][0]
+  winner_proba = loaded_model.predict_proba(df_combined)[0][1] if prediction == 1 else loaded_model.predict_proba(df_combined)[0][0]
 
   print(f"{HomeTeam} vs {AwayTeam} and the winner is {winner} -- ({winner_type}) -- with a prob of {winner_proba} ")
-  print(f"{HomeTeam} vs {AwayTeam} and the pred_probab on the classes is {pred_probab}")
-  print(f"{HomeTeam} vs {AwayTeam} and the home probability is {pred_probab[0][1]}")
+  #print(f"{HomeTeam} vs {AwayTeam} and the pred_probab on the classes is {pred_probab}")
+  #print(f"{HomeTeam} vs {AwayTeam} and the home probability is {pred_probab[0][1]}")
 
   print(f"------------------------------------")
   

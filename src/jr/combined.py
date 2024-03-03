@@ -1,8 +1,9 @@
-from sklearn.ensemble import VotingClassifier
+from customprobability import CustomVotingClassifier
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split 
 from sklearn.metrics import accuracy_score 
+from sklearn.model_selection import RandomizedSearchCV
 df = pd.read_csv('./data/NSL_regular_season_final_model_input.csv')
 # Load the pickled models
 with open('logistic_regression.pkl', 'rb') as f:
@@ -16,12 +17,14 @@ with open('gradientboosting_model.pkl', 'rb') as f:
     model3 = pickle.load(f)
 
 
+
 # Create the VotingClassifier
-voting_clf = VotingClassifier(estimators=[
+voting_clf = CustomVotingClassifier(estimators=[
     ('model1', model1),
     ('model2', model2),
-    ('model3', model3),
-])
+    ('model3', model3)]
+)
+
 
 def outcome(row):
     if row['HomeScore'] > row['AwayScore']:
@@ -49,4 +52,4 @@ accuracy = accuracy_score(y_test, predictions)
 print(accuracy)
 
 with open("voting_class.pkl", "wb") as f:
-    pickle.dump(voting_clf, f)
+  pickle.dump(voting_clf, f)
