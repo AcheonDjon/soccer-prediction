@@ -71,5 +71,5 @@ print(accuracy)
 
 #save the model
 # Save the trained model to a file
-with open("xgboost_model.pkl", "wb") as f:
+with open("logistic_regression.pkl", "wb") as f:
     pickle.dump(best_model, f)
