@@ -32,7 +32,7 @@ def outcome(row):
 
 # df["Away_ToP"]= 1- df['Home_ToP']
 X = df.iloc [:,5:-4]
-
+X['Away_ToP'] = 1- X['Home_ToP']
 print(X)
 
 Y = df.apply(outcome, axis=1)
@@ -52,13 +52,7 @@ best_params = grid_search.best_params_
 best_model = grid_search.best_estimator_
 
 
-#print feature importance
-# Get feature importances
-#importances = classifier.feature_importances_
 
-# # Print feature importances
-#for i, importance in enumerate(importances):
-    #print(f"Feature {i}: {importance}")
 
 y_pred = best_model.predict(X_test)
 
@@ -68,6 +62,16 @@ accuracy = accuracy_score(y_test, y_pred)
 print(accuracy)
 # df = df.drop(['game_id',"HomeTeam","AwayTeam","HomeScore",'AwayScore'], axis=1)
 
+# Print feature importance
+feature_importance = best_model.coef_[0]
+for feature, importance in zip(X.columns, feature_importance):
+    print(f"{feature}: {importance}")
+
+# Normalize feature importance
+feature_importance /= len(feature_importance)
+
+# Print feature importance
+print("Normalized Feature Importance:", feature_importance)
 
 #save the model
 # Save the trained model to a file

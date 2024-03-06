@@ -26,7 +26,12 @@ def outcome(row):
     else:
         return 0
 
-X = df.iloc[:, 5:-4]
+#feature engineering
+X = df.iloc [:,5:-4]
+X['Away_ToP'] = 1- X['Home_ToP']
+# X['Home_Adv'] = 1 
+# X['Away_Adv'] = 0
+
 Y = df.apply(outcome, axis=1)
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)

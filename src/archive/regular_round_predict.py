@@ -49,7 +49,7 @@ dataset['Outcome'] = dataset.apply(determine_outcome, axis=1)
 y = dataset['Outcome']
 X = dataset.drop(['Outcome',], axis=1)
 
-X = X.iloc[:,5:-2]
+X = X.iloc[:,5:]
 
 print(X)
 

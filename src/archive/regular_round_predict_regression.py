@@ -50,7 +50,7 @@ col = X.columns
 X = X.iloc[:, 5:]
 
 # Normalize the data using StandardScaler
-# X = StandardScaler().fit_transform(X)
+X = StandardScaler().fit_transform(X)
 
 # Split the dataset for training and testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=47)
