@@ -19,3 +19,12 @@ Workbook: https://analyticsatwharton.smapply.io/protected/r/FkmBTc_C-GJ6iD28zx8O
 
 
 Videos - https://upenn.hosted.panopto.com/Panopto/Pages/Viewer.aspx?pid=0dbde4e5-41c3-4976-b985-b10a011538c0
+
+
+# Steps to execute 
+
+1. Calculate Elo Rating for teams - starting with 1500 as starting elo
+    a. execute elo_rating_calc.py 
+    b. update regular season data with new rating
+    a. save the final elo ratings after regular season to 'NSL_regular_season_final_elo_ratings.csv' 
+2. 
